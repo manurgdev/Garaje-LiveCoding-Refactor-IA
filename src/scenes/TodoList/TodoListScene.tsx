@@ -41,7 +41,7 @@ export const TodoListScene: FC = () => {
   };
 
   return (
-    <TodoList title="Lista de tareas (React + TypeScript + Prop Composition)"
+    <TodoList title="Lista de tareas"
       userFilter={<UserFilter
         users={users}
         selectedUser={selectedUser}
