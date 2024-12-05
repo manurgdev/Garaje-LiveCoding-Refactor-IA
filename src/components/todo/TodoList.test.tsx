@@ -14,18 +14,30 @@ describe('TodoList', () => {
     expect(screen.getByText('Child content')).toBeInTheDocument();
   });
 
-  test('applies correct CSS classes', () => {
-    const { container } = render(<TodoList title="Test">Child content</TodoList>);
-    const outerDiv = container.firstChild as HTMLElement;
-    expect(outerDiv).toHaveClass('min-h-screen bg-gray-100 flex justify-center items-start py-12');
-    
-    const innerDiv = outerDiv.firstChild as HTMLElement;
-    expect(innerDiv).toHaveClass('w-full max-w-3xl bg-white shadow-lg rounded-lg p-8');
+  test('renders userFilter when provided', () => {
+    render(
+      <TodoList title="Test" userFilter={<div>User Filter</div>}>
+        Child content
+      </TodoList>
+    );
+    expect(screen.getByText('User Filter')).toBeInTheDocument();
   });
 
-  test('renders h1 with correct CSS classes', () => {
-    render(<TodoList title="Test">Child content</TodoList>);
-    const heading = screen.getByRole('heading', { level: 1 });
-    expect(heading).toHaveClass('text-2xl font-bold mb-6 text-gray-900');
+  test('renders statusFilter when provided', () => {
+    render(
+      <TodoList title="Test" statusFilter={<div>Status Filter</div>}>
+        Child content
+      </TodoList>
+    );
+    expect(screen.getByText('Status Filter')).toBeInTheDocument();
+  });
+
+  test('renders todoInput when provided', () => {
+    render(
+      <TodoList title="Test" todoInput={<input placeholder="Add todo" />}>
+        Child content
+      </TodoList>
+    );
+    expect(screen.getByPlaceholderText('Add todo')).toBeInTheDocument();
   });
 });

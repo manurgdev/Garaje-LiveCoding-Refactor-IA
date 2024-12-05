@@ -10,7 +10,7 @@ import { TodoList } from '@/components/todo/TodoList';
 import { useTodos } from '@/hooks/useTodos';
 import { Todo } from '@/types/Todo';
 
-export const TodoListWithComposition: FC = () => {
+export const TodoListScene: FC = () => {
   const [newTodo, setNewTodo] = useState('');
   const [users] = useState<string[]>(['Manu', 'Cris', 'Bob']);
   const [selectedUser, setSelectedUser] = useState('');
@@ -41,38 +41,31 @@ export const TodoListWithComposition: FC = () => {
   };
 
   return (
-    <TodoList title="Lista de tareas (React + TypeScript + Composition)">
-      <div className="mb-6">
-          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <UserFilter
-              users={users}
-              selectedUser={selectedUser}
-              onUserChange={setSelectedUser}
-            />
-            <StatusFilter filter={filter} onFilterChange={setFilter} />
-          </div>
-        </div>
+    <TodoList title="Lista de tareas (React + TypeScript + Prop Composition)"
+      userFilter={<UserFilter
+        users={users}
+        selectedUser={selectedUser}
+        onUserChange={setSelectedUser}
+      />}
+      statusFilter={<StatusFilter filter={filter} onFilterChange={setFilter} />}
+      todoInput={<TodoInput newTodo={newTodo} setNewTodo={setNewTodo} addTodo={handleAddTodo} />}
+    >
+      {isLoading && <p className="text-blue-500 mt-4">Cargando...</p>}
+      {error && <p className="text-red-500 mt-4">Error: {error}</p>}
 
-        <div className="flex flex-row gap-2 items-center">
-          <TodoInput newTodo={newTodo} setNewTodo={setNewTodo} addTodo={handleAddTodo} />
-        </div>
-
-        {isLoading && <p className="text-blue-500 mt-4">Cargando...</p>}
-        {error && <p className="text-red-500 mt-4">Error: {error}</p>}
-
-        <div className="space-y-3 mt-4">
-          {todos.map((todo) => (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              users={users}
-              onToggleCompleted={toggleCompleted}
-              onUpdateText={updateText}
-              onUpdateUser={updateUser}
-              onDeleteTodo={deleteTodo}
-            />
-          ))}
-        </div>
+      <div className="space-y-3 mt-4">
+        {todos.map((todo) => (
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            users={users}
+            onToggleCompleted={toggleCompleted}
+            onUpdateText={updateText}
+            onUpdateUser={updateUser}
+            onDeleteTodo={deleteTodo}
+        />
+        ))}
+      </div>
     </TodoList>
   )
 };
