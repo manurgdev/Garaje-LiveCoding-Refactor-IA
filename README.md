@@ -1,4 +1,4 @@
-## react-good
+## Frontend
 
 Este ejemplo es una aplicación de lista de tareas (ToDo List) hecha con React 19 y Next.js 15 usando composiciones.
 
@@ -54,6 +54,26 @@ pnpm test:coverage
 
 ```sh
 pnpm test:coverage:watch
+```
+
+## Backend
+
+### Instalación
+
+```sh
+pnpm backend:install
+```
+
+### Desarrollo
+
+```sh
+pnpm backend:dev
+```
+
+### Producción
+
+```sh
+pnpm backend
 ```
 
 ## Notas
