@@ -5,8 +5,8 @@ import type { Metadata } from "next";
 
 
 export const metadata: Metadata = {
-  title: "BiznagaFest 2024 - Componentización eficiente",
-  description: "React Good Example",
+  title: "Refactoriza tu web/app usando IA",
+  description: "Taller de Garaje de ideas",
 };
 
 export default function RootLayout({
