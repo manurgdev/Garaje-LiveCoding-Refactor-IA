@@ -7,6 +7,7 @@ import {
   updateTodoAPI,
 } from '@/services/api';
 import { Todo } from '@/types/Todo';
+import { useToast } from '@/context/ToastContext';
 
 interface UseTodosProps {
   selectedUser: string;
@@ -17,6 +18,7 @@ export function useTodos({ selectedUser, filter }: UseTodosProps) {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   const fetchTodos = useCallback(async () => {
     setIsLoading(true);
@@ -26,58 +28,57 @@ export function useTodos({ selectedUser, filter }: UseTodosProps) {
       setTodos(data);
     } catch (err) {
       setError((err as Error).message);
+      showToast((err as Error).message, 'error');
     } finally {
       setIsLoading(false);
     }
-  }, [selectedUser, filter]);
+  }, [selectedUser, filter, showToast]);
 
-  const addTodo = useCallback(
-    async (text: string) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        await createTodoAPI(text);
-        await fetchTodos();
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [fetchTodos]
-  );
+  const addTodo = useCallback(async (text: string) => {
+    setError(null);
+    try {
+      const newTodoId = await createTodoAPI(text);
+      const newTodo: Todo = {
+        id: newTodoId,
+        text,
+        completed: false,
+        user: '',
+      };
+      setTodos(prevTodos => [...prevTodos, newTodo]);
+      showToast('Tarea creada correctamente', 'success');
+    } catch (err) {
+      setError((err as Error).message);
+      showToast((err as Error).message, 'error');
+    }
+  }, [showToast]);
 
-  const updateTodo = useCallback(
-    async (todoId: number, updates: Partial<Todo>) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        await updateTodoAPI(todoId, updates);
-        await fetchTodos();
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [fetchTodos]
-  );
+  const updateTodo = useCallback(async (todoId: number, updates: Partial<Todo>) => {
+    setError(null);
+    try {
+      await updateTodoAPI(todoId, updates);
+      setTodos(prevTodos =>
+        prevTodos.map(todo =>
+          todo.id === todoId ? { ...todo, ...updates } : todo
+        )
+      );
+      showToast('Tarea actualizada correctamente', 'success');
+    } catch (err) {
+      setError((err as Error).message);
+      showToast((err as Error).message, 'error');
+    }
+  }, [showToast]);
 
-  const deleteTodo = useCallback(
-    async (id: number) => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        await deleteTodoAPI(id);
-        await fetchTodos();
-      } catch (err) {
-        setError((err as Error).message);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [fetchTodos]
-  );
+  const deleteTodo = useCallback(async (id: number) => {
+    setError(null);
+    try {
+      await deleteTodoAPI(id);
+      setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
+      showToast('Tarea eliminada correctamente', 'success');
+    } catch (err) {
+      setError((err as Error).message);
+      showToast((err as Error).message, 'error');
+    }
+  }, [showToast]);
 
   useEffect(() => {
     fetchTodos();

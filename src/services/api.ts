@@ -10,21 +10,24 @@ const handleResponse = async (response: Response) => {
   if (!data.status) {
     throw new Error('API responded with an error');
   }
-  return data.data;
+  return data;
 };
 
 export const fetchTodosAPI = async (user: string, filter: string): Promise<Todo[]> => {
   const response = await fetch(`${API_URL}?user=${user}&filter=${filter}`);
-  return handleResponse(response);
+  const { data } = await handleResponse(response);
+  return data;
 };
 
-export const createTodoAPI = async (text: string): Promise<void> => {
+export const createTodoAPI = async (text: string): Promise<number> => {
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ text, user: '' }),
   });
-  await handleResponse(response);
+  const data = await handleResponse(response);
+
+  return data.id;
 };
 
 export const updateTodoAPI = async (todoId: number, updates: Partial<Todo>): Promise<void> => {

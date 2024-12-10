@@ -9,6 +9,7 @@ import { TodoItem } from '@/components/todo/TodoItem';
 import { TodoList } from '@/components/todo/TodoList';
 import { useTodos } from '@/hooks/useTodos';
 import { Todo } from '@/types/Todo';
+import { TodoListSkeleton } from '@/components/skeleton/TodoSkeleton';
 
 export const TodoListScene: FC = () => {
   const [newTodo, setNewTodo] = useState('');
@@ -41,7 +42,8 @@ export const TodoListScene: FC = () => {
   };
 
   return (
-    <TodoList title="Lista de tareas"
+    <TodoList 
+      title="Lista de tareas"
       userFilter={<UserFilter
         users={users}
         selectedUser={selectedUser}
@@ -50,22 +52,23 @@ export const TodoListScene: FC = () => {
       statusFilter={<StatusFilter filter={filter} onFilterChange={setFilter} />}
       todoInput={<TodoInput newTodo={newTodo} setNewTodo={setNewTodo} addTodo={handleAddTodo} />}
     >
-      {isLoading && <p className="text-blue-500 mt-4">Cargando...</p>}
-      {error && <p className="text-red-500 mt-4">Error: {error}</p>}
-
-      <div className="space-y-3 mt-4">
-        {todos.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            todo={todo}
-            users={users}
-            onToggleCompleted={toggleCompleted}
-            onUpdateText={updateText}
-            onUpdateUser={updateUser}
-            onDeleteTodo={deleteTodo}
-        />
-        ))}
-      </div>
+      {isLoading ? (
+        <TodoListSkeleton />
+      ) : (
+        <div className="space-y-3 mt-4">
+          {todos.map((todo) => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              users={users}
+              onToggleCompleted={toggleCompleted}
+              onUpdateText={updateText}
+              onUpdateUser={updateUser}
+              onDeleteTodo={deleteTodo}
+            />
+          ))}
+        </div>
+      )}
     </TodoList>
-  )
+  );
 };
