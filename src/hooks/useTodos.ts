@@ -5,7 +5,7 @@ import {
   deleteTodoAPI,
   fetchTodosAPI,
   updateTodoAPI,
-} from '@/services/api';
+} from '@/services/todo/todoService';
 import { Todo } from '@/types/Todo';
 
 interface UseTodosProps {

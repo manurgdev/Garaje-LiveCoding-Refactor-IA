@@ -1,10 +1,10 @@
 import { act,renderHook, RenderHookResult, waitFor } from '@testing-library/react';
 
-import * as api from '@/services/api';
+import * as api from '@/services/todo/todoService';
 
 import { useTodos } from './useTodos';
 
-jest.mock('@/services/api');
+jest.mock('@/services/todo/todoService');
 
 describe('useTodos', () => {
   it('fetches todos on mount', async () => {
