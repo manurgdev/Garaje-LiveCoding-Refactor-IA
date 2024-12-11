@@ -2,6 +2,10 @@
 
 Este ejemplo es una aplicación de lista de tareas (ToDo List) hecha con React 19 y Next.js 15 usando composiciones.
 
+## Slides
+
+https://drive.google.com/file/d/19IPqMERHcYxU8p_lzV514ZvWGFnMhX6N/view
+
 ## Instalación
 
 ```sh
